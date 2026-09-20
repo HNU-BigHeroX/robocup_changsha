@@ -135,6 +135,22 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 | `episodes.csv` | 每个回合的结果 |
 | `timings.npz` | 耗时数据 |
 
+完成预检和评测后，输出目录通常类似：
+
+```text
+outputs/P017/
+├── check/
+│   └── audit-report.json
+└── eval/
+    ├── result.json
+    ├── episodes.csv
+    ├── timings.npz
+    ├── errors.jsonl
+    └── report.md
+```
+
+`result.json` 是机器可读的总结果，`report.md` 适合快速浏览，`errors.jsonl` 保存逐条错误记录。一次新的实验应使用新的输出目录，避免与旧结果混在一起。
+
 预检输出目录中的 `audit-report.json` 还包含以下信息：
 
 | 字段 | 含义 |
@@ -330,6 +346,30 @@ checkpoint_manifest:
 ### `entry.py` 可以导入，但评测仍失败
 
 如果输出文件已经生成，先在 `result.json` 的 `errors` 中查看错误阶段、`step_index` 和上下文，再用 `episodes.csv` 的场景、回合、`status`、`steps_completed` 和 `error_code` 定位对应的回合记录。如果没有生成结果文件，先读取命令行错误信息。常见原因包括：返回动作形状或类型错误、动作包含非有限数值、模型文件路径依赖当前工作目录、`reset` 没有清空状态，或推理超过时间限制。
+
+例如，动作形状不符合协议时，`result.json` 的相关字段可能类似：
+
+```json
+{
+  "status": "protocol_error",
+  "performance_score": null,
+  "errors": [
+    {
+      "code": "ACTION_INVALID",
+      "stage": "act",
+      "owner": "participant",
+      "case_id": "basic-0",
+      "repeat_index": 0,
+      "agent_index": 0,
+      "step_index": 0,
+      "message": "Action shape must be (2,)",
+      "retryable": false
+    }
+  ]
+}
+```
+
+这是匿名化的结构示例，不是实际评测记录。排查时先看 `code` 和 `stage` 判断错误类型，再用场景、回合、机器人和步骤字段定位触发位置；失败结果的 `performance_score` 应为 `null`。
 
 ### 本地成绩和正式成绩不同
 
