@@ -4,7 +4,7 @@
 
 <img src="docs/images/logo/BigHeroX.jpg" alt="BigHeroX Logo" width="280"/>
 
-### 湖南大学 Robot 工坊 · BigHeroX 超能麓团队
+### 湖南大学 Robot 工坊 · BigHeroX 
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![PettingZoo](https://img.shields.io/badge/PettingZoo-MPE2-green.svg)](https://pettingzoo.farama.org/environments/mpe2/)
