@@ -1,4 +1,23 @@
+<div align="center">
+
 # MPE2 协同覆盖选拔赛
+
+<img src="docs/images/logo/BigHeroX.jpg" alt="BigHeroX Logo" width="280"/>
+
+### 湖南大学 Robot 工坊 · BigHeroX 超能麓团队
+
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
+[![PettingZoo](https://img.shields.io/badge/PettingZoo-MPE2-green.svg)](https://pettingzoo.farama.org/environments/mpe2/)
+[![Gymnasium](https://img.shields.io/badge/Gymnasium-API-blue.svg)](https://gymnasium.farama.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+*多机器人协同覆盖 · 有限观测下的策略评测*
+
+**[赛题与规程](competitionv1.0.md)** · **[使用指南](docs/how_to_use.md)** · **[获取仓库](docs/how_to_fork.md)** · **[Git 工作流程](docs/git.md)**
+
+</div>
+
+---
 
 这是本次比赛的参赛公开版。你需要编写一个多机器人协同策略，让机器人在有限观测下覆盖移动目标，同时尽量减少碰撞。仓库提供任务环境、策略接口、公开测试配置和一份可以直接运行的学习策略示例。
 
