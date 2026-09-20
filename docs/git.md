@@ -1,6 +1,6 @@
 # Git 工作流程
 
-每位参赛者使用一条编号分支保存参赛版本。小改动可以直接在编号分支上完成；需要单独试验的功能，可以另开功能分支，完成后合回本人编号分支。
+每位参赛者使用一条编号分支保存参赛版本。`origin` 指向个人 Fork，用于推送个人分支；`upstream` 指向官方仓库，用于获取官方更新。小改动可以直接在编号分支上完成；需要单独试验的功能，可以另开功能分支，完成后合回本人编号分支。
 
 无论使用哪种分支，都要先准备好分支，再创建或修改文件。首次开发的顺序是：确认编号 → 检查并准备分支 → 创建本人目录 → 开发。第一次克隆和复制模板的步骤见[获取仓库](how_to_fork.md)。
 
@@ -8,7 +8,7 @@
 
 | 分支                 | 用途                                     |
 | -------------------- | ---------------------------------------- |
-| `main`             | 官方主线，由组织方维护                   |
+| `master`           | 官方主线，由组织方维护                   |
 | `P017`             | 本人的参赛开发分支                       |
 | `P017-obs-history` | 可选的功能分支，采用`Pxxx-功能名` 格式 |
 
@@ -49,7 +49,7 @@ git switch P017
 git switch -c P017-obs-history
 ```
 
-如果功能分支已经存在，直接 `git switch P017-obs-history`。确认当前分支后再开始该功能的修改，不要先在 `main` 上开发，再补建分支。
+如果功能分支已经存在，直接 `git switch P017-obs-history`。确认当前分支后再开始该功能的修改，不要先在 `master` 上开发，再补建分支。
 
 开始修改前建议再检查一次分支与改动范围：
 
@@ -88,16 +88,16 @@ git merge --no-ff P017-obs-history -m "chore(P017): 合并目标历史估计功�
 git push -u origin P017
 ```
 
-功能分支也可以推送到比赛仓库留存过程，但最终提交 PR 的来源分支必须是本人编号分支。
+功能分支也可以推送到个人 Fork 留存过程，但最终提交 PR 的来源分支必须是本人编号分支。
 
 ## 同步官方更新
 
 先保存本人改动，确认工作区干净，再获取并合并官方主线：
 
 ```sh
-git fetch origin
+git fetch upstream
 git switch P017
-git merge origin/main
+git merge upstream/master
 ```
 
 合并可以保留已经推送的开发历史，不需要强制推送。如果出现冲突，先查看涉及哪些文件。不要自行修改官方文件来消除冲突；涉及官方文件或他人目录时，联系组织方确认处理方式。
@@ -119,8 +119,8 @@ git push origin P017/v1.0
 ## 提交前检查
 
 ```sh
-git fetch origin
-git diff --name-only origin/main...P017
+git fetch upstream
+git diff --name-only upstream/master...P017
 git status --short
 ```
 
@@ -134,4 +134,4 @@ git status --short
 
 如果 `git status --short` 仍有未提交内容，先确认这些内容是否属于最终版本。不要仅为了得到“干净工作区”而删除无法辨认的文件。
 
-最终 PR 的标题为 `[P017] Final Submission`，从 `P017` 提交到 `main`，由组织方审核。时间窗口和版本冻结规则见[参与指南](../CONTRIBUTING.md)。
+最终 PR 的标题为 `[P017] Final Submission`，从个人 Fork 的 `P017` 分支提交到官方仓库的 `master` 分支，由组织方审核。时间窗口和版本冻结规则见[参与指南](../CONTRIBUTING.md)。

@@ -8,7 +8,7 @@
 
 先向组织方确认参赛编号和仓库权限。文档用 `P017` 举例，操作时请换成自己的编号。
 
-1. 按[获取仓库](docs/how_to_fork.md)克隆仓库，检查并准备好本人编号分支，再复制模板建立本人目录。
+1. 按[获取仓库](docs/how_to_fork.md) Fork 并克隆仓库，检查并准备好本人编号分支，再复制模板建立本人目录。
 2. 按[使用指南](docs/how_to_use.md)安装 Python 3.12 和评测依赖。
 3. 跑一次提交预检和公开测试，确认模板在你的机器上能够正常运行。
 4. 在 `participant/P017/` 内开发，记录实验，按[参与指南](CONTRIBUTING.md)准备最终提交。
@@ -100,7 +100,7 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 ## 文档
 
 - [参与指南](CONTRIBUTING.md)：开发记录、报分和最终提交。
-- [获取仓库](docs/how_to_fork.md)：克隆、准备分支、复制模板。
+- [获取仓库](docs/how_to_fork.md)：Fork、克隆、准备分支、复制模板。
 - [使用指南](docs/how_to_use.md)：环境安装、接口、模型和本地测试。
 - [Git 工作流程](docs/git.md)：编号分支、功能分支、同步更新和标签。
 - [提交消息](docs/cz.md)：怎样写清楚每次提交做了什么。

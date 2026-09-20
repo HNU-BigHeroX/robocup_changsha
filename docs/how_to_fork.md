@@ -1,25 +1,38 @@
 # 获取仓库并开始开发
 
-本次比赛直接在官方比赛仓库中使用个人分支，不需要 Fork。先向组织方确认仓库地址、访问权限和自己的参赛编号。
+本次比赛通过个人 Fork 保存参赛分支。先向组织方确认官方仓库地址、访问权限和自己的参赛编号。
 
-下面用 `P017` 举例。请将它替换为自己的编号，并依次完成：确认编号 → 检查并准备分支 → 创建本人目录 → 开发。
+下面用 `P017` 举例。请将它替换为自己的编号，并依次完成：确认编号 → Fork 并克隆仓库 → 检查并准备分支 → 创建本人目录 → 开发。
 
-## 克隆仓库
+## Fork 并克隆仓库
 
-将下面的地址换成组织方提供的地址：
+打开组织方提供的官方仓库，点击 **Fork**，将仓库复制到自己的 GitHub 账户：
 
-![在 GitHub 仓库主页复制 HTTPS 克隆地址](images/how_to_fork/01-clone-repository.png)
+![在 GitHub 官方仓库页面点击 Fork](images/how_to_fork/01-fork-repository.png)
 
-*图 1：在仓库主页点击 Code，选择 HTTPS，然后复制仓库地址。GitHub 的按钮位置或文字可能调整，以组织方提供的地址为准。*
+*图 1：在官方仓库页面点击 Fork。GitHub 的按钮位置或文字可能调整。*
 
-依次点击 **Code**、**HTTPS** 和地址右侧的复制按钮，再执行：
+完成后进入个人 Fork 页面，依次点击 **Code**、**HTTPS** 和地址右侧的复制按钮：
+
+![在个人 Fork 页面复制 HTTPS 克隆地址](images/how_to_fork/02-clone-fork.png)
+
+*图 2：在个人 Fork 页面复制 HTTPS 克隆地址。页面应显示该仓库 Fork 自官方仓库；实际复制的必须是个人 Fork 的地址。*
+
+然后执行：
 
 ```sh
-git clone <仓库地址> robocup-mpe2
-cd robocup-mpe2
+git clone https://github.com/<你的用户名>/<仓库名>.git
+cd <仓库名>
+
+git remote add upstream <官方仓库地址>
+git remote -v
+
+git fetch upstream
+git switch -c P017 upstream/master
+git push -u origin P017
 ```
 
-本文后面的命令都在这个目录中执行。如果仓库已经在本地，直接进入仓库，不必再克隆一份。
+将占位符换成自己的 GitHub 用户名、实际仓库名和组织方提供的官方仓库地址。本文后面的命令都在克隆后的仓库目录中执行。如果个人 Fork 已经在本地，直接进入仓库，不必再克隆一份；但仍要检查下面的远程配置。
 
 克隆后先确认远程地址和当前状态，避免在错误的同名目录中操作：
 
@@ -29,7 +42,7 @@ git status --short
 git branch --show-current
 ```
 
-`origin` 应指向组织方提供的仓库。工作区状态不为空时，先弄清现有改动的来源；不要用重置、强制切换或删除文件的方式跳过这一步。
+`origin` 应指向个人 Fork，`upstream` 应指向组织方提供的官方仓库。工作区状态不为空时，先弄清现有改动的来源；不要用重置、强制切换或删除文件的方式跳过这一步。
 
 ## 先准备编号分支
 
@@ -37,6 +50,7 @@ git branch --show-current
 
 ```sh
 git status --short
+git fetch upstream
 git fetch origin
 git branch --all
 ```
@@ -45,17 +59,19 @@ git branch --all
 
 ```text
 $ git branch --all
-* main
-  remotes/origin/HEAD -> origin/main
-  remotes/origin/main
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+  remotes/upstream/master
 ```
 
-这是示例输出，不要求颜色、空格或排列完全相同。重点是确认本人编号分支是否已经存在于本地或 `origin`。
+这是示例输出，不要求颜色、空格或排列完全相同。重点是确认官方主线为 `upstream/master`，并检查本人编号分支是否已经存在于本地或个人 Fork（`origin`）。
 
 工作区有尚未保存的改动时，先确认它们属于谁、应该保留在哪条分支，不要直接覆盖。首次参赛且本地、远程都没有 `P017` 分支时，从官方主线创建：
 
 ```sh
-git switch -c P017 origin/main
+git switch -c P017 upstream/master
+git push -u origin P017
 ```
 
 如果本地已有本人分支，使用 `git switch P017`；如果只有远程存在，使用 `git switch --track origin/P017`。不要重复创建，也不要借用别人的编号。
@@ -73,7 +89,7 @@ P017
 
 1. `git branch --list P017` 检查本地是否已有本人分支。
 2. `git branch --remotes --list origin/P017` 检查远程是否已有本人分支。
-3. 两处都没有时才从官方主线创建。
+3. 两处都没有时才从官方主线 `upstream/master` 创建，并推送到 `origin`。
 4. 两处都有但提交不同，先查看 `git log --oneline --decorate --graph --all`，不要直接覆盖远程历史。
 
 示例编号只能用于说明命令。没有组织方确认的编号时，不要猜测、占用或复用已有编号。
