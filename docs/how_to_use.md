@@ -37,6 +37,19 @@ python -c "import numpy, gymnasium, pettingzoo, mpe2; print('runtime imports: ok
 python -c "from coverage_bench import get_protocol_spec; print(get_protocol_spec())"
 ```
 
+示例输出如下。Python 的补丁版本可以不同，但主、次版本必须是 3.12：
+
+```text
+$ python --version
+Python 3.12.14
+$ python -m pip check
+No broken requirements found.
+$ python -c "import numpy, gymnasium, pettingzoo, mpe2; print('runtime imports: ok')"
+runtime imports: ok
+$ python -c "from coverage_bench import get_protocol_spec; print(get_protocol_spec())"
+ProtocolSpec(protocol_version='coverage-policy/1.0', task_version='coverage-task/1.0', agent_capacity=8, target_capacity=8, action_dim=2, position_scale=1.0, velocity_scale=1.0, max_episode_steps=256, flatten_version='coverage-flat/1.0')
+```
+
 应确认：
 
 - Python 版本为 3.12；
@@ -86,6 +99,28 @@ python -c "from coverage_bench import get_protocol_spec; print(get_protocol_spec
 python scripts/check_submission.py --submission participant/P017 --output outputs/P017/check
 ```
 
+通过时，终端会给出审核报告的位置：
+
+```text
+审核通过: /path/to/robocup-mpe2/outputs/P017/check/audit-report.json
+```
+
+`audit-report.json` 的关键字段可能类似下面的示例。内容是格式示意，不是某位参赛者的实际审核记录：
+
+```json
+{
+  "rejections": [],
+  "scan_hits": [],
+  "digest": {
+    "participant_id": "P017",
+    "protocol_version": "coverage-policy/1.0",
+    "task_version": "coverage-task/1.0"
+  }
+}
+```
+
+`rejections` 为空表示没有硬拒绝项；仍需继续运行公开测试，预检通过不等于已经获得有效分数。
+
 通过后再运行公开测试：
 
 ```sh
@@ -118,6 +153,40 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 | `evaluate_one.py` | 2 | 提交、套件或种子配置错误 |
 | `evaluate_one.py` | 3 | 加载、超时、协议或运行时错误 |
 | `evaluate_one.py` | 4 | 评测执行出现其他致命错误 |
+
+### 成功结果示例
+
+下面只展示 `result.json` 中最常查看的字段。分数是示例值，不代表模板基准、合格线或正式成绩：
+
+```json
+{
+  "participant_id": "P017",
+  "status": "ok",
+  "provenance": "local_preview",
+  "suite_id": "public-suite-v1",
+  "group_metrics": {
+    "basic": {
+      "num_episodes": 4
+    },
+    "cooperation": {
+      "num_episodes": 4
+    }
+  },
+  "performance_score": 66.67,
+  "errors": []
+}
+```
+
+`episodes.csv` 有很多诊断字段。快速检查时，可以先关注下面这些列；下表是压缩示意，不是完整 CSV：
+
+| `group_id` | `case_id` | `repeat_index` | `status` | `steps_completed` |
+| --- | --- | ---: | --- | ---: |
+| `basic` | `basic-0` | 0 | `ok` | 10 |
+| `basic` | `basic-0` | 1 | `ok` | 10 |
+| … | … | … | … | … |
+| `cooperation` | `coop-1` | 1 | `ok` | 10 |
+
+公开套件应有 8 条回合记录，且每条记录的 `status` 都应为 `ok`。若 `result.json` 或任一回合失败，先处理错误，不要继续比较示例分数。
 
 先确认 `result.json` 中的 `status` 为 `ok`，再比较成绩；失败结果不能作为有效分数。当前公开套件有 4 个场景，每个场景重复 2 次，共 8 个回合。评分定义见规程第 17 节，配置见 [scoring-v1.yaml](../configs/scoring-v1.yaml)。
 
@@ -216,6 +285,22 @@ python3.12 -m venv .venv-train
 ```sh
 python -c "from pathlib import Path; import hashlib; p = Path('participant/P017/artifacts/policy.npz'); print('size_bytes:', p.stat().st_size); print('sha256:', hashlib.sha256(p.read_bytes()).hexdigest())"
 ```
+
+模板自带模型的示例输出及对应清单如下：
+
+```text
+size_bytes: 92186
+sha256: aedfa4443847600df2fd5e59e0942bff0077849f6d27ea163baf8b4b18d5c728
+```
+
+```yaml
+checkpoint_manifest:
+  - path: "artifacts/policy.npz"
+    sha256: "aedfa4443847600df2fd5e59e0942bff0077849f6d27ea163baf8b4b18d5c728"
+    size_bytes: 92186
+```
+
+这组三个值必须对应同一个文件。替换模型后，不要继续使用模板的摘要或字节数，应把命令的最新输出写回本人目录中的 `submission.yaml`。
 
 同步更新训练命令、个人配置路径、推理依赖和报告，再重新运行预检。导出模型后，还要比较训练模型与推理模型在同一批观测上的动作；预检通过并不能证明两者一致。
 

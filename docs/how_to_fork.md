@@ -8,9 +8,21 @@
 
 将下面的地址换成组织方提供的地址：
 
-![在 GitHub 仓库主页复制 HTTPS 克隆地址](images/how_to_fork/01-clone-repository.png)
+> 网页操作示意：GitHub 的按钮位置或文字可能调整，以组织方提供的仓库地址为准。
 
-*图 1：在仓库主页点击 Code，选择 HTTPS，然后复制仓库地址。*
+```text
+仓库主页
+┌──────────────────────────────────────────────┐
+│ Code ▼                                       │
+│ ┌──────────────────────────────────────────┐ │
+│ │ Clone                                    │ │
+│ │ [ HTTPS ]  SSH  GitHub CLI               │ │
+│ │ https://github.com/<组织>/<仓库>.git  [复制] │
+│ └──────────────────────────────────────────┘ │
+└──────────────────────────────────────────────┘
+```
+
+依次点击 **Code**、**HTTPS** 和地址右侧的复制按钮，再执行：
 
 ```sh
 git clone <仓库地址> robocup-mpe2
@@ -39,6 +51,17 @@ git fetch origin
 git branch --all
 ```
 
+首次克隆、尚未创建编号分支时，输出可能类似：
+
+```text
+$ git branch --all
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+```
+
+这是示例输出，不要求颜色、空格或排列完全相同。重点是确认本人编号分支是否已经存在于本地或 `origin`。
+
 工作区有尚未保存的改动时，先确认它们属于谁、应该保留在哪条分支，不要直接覆盖。首次参赛且本地、远程都没有 `P017` 分支时，从官方主线创建：
 
 ```sh
@@ -48,6 +71,13 @@ git switch -c P017 origin/main
 如果本地已有本人分支，使用 `git switch P017`；如果只有远程存在，使用 `git switch --track origin/P017`。不要重复创建，也不要借用别人的编号。
 
 用 `git branch --show-current` 确认当前是 `P017`，再进行下一步。后续需要功能分支时，先按 [Git 工作流程](git.md)准备好分支，再开始修改。
+
+```text
+$ git branch --show-current
+P017
+```
+
+只要最后一行是本人的实际编号，就已经位于正确的编号分支；不要照抄示例中的 `P017`。
 
 如果分支状态与预期不同，按下面的顺序判断：
 
@@ -73,6 +103,25 @@ Linux / macOS：
 ```sh
 cp -R participant/_template participant/P017
 ```
+
+复制完成后的目录结构应与下面的示例相近：
+
+```text
+participant/P017/
+├── artifacts/
+│   └── policy.npz
+├── entry.py
+├── train.py
+├── submission.yaml
+├── requirements-infer.lock
+├── LOG.md
+├── experiments.csv
+├── REPORT.md
+├── THIRD_PARTY.md
+└── LICENSE
+```
+
+文件顺序不重要，但模板中的必需文件不能遗漏。后续增加的个人训练配置、导出脚本和辅助代码也应留在本人的编号目录内。
 
 打开 `participant/P017/submission.yaml`，将 `participant_id` 改为自己的编号：
 
