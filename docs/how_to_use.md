@@ -73,7 +73,7 @@ ProtocolSpec(protocol_version='coverage-policy/1.0', task_version='coverage-task
 
 请结合模板的[策略实现](../participant/_template/entry.py)和[协议类型](../coverage_bench/protocol.py)查看完整签名。动作必须是形状为 `(2,)` 的 `float32` 数组，两个分量都在 `[-1, 1]` 内。
 
-模型、配置和材料要求见[赛题与规程](../MPE2-协同覆盖选拔赛-赛题与规程.md)第 16 节。模板中的报告、日志和实验数据用于展示格式，提交时要换成自己的实际记录。
+模型、配置和材料要求见[赛题与规程](../competitionv1.0.md)第 16 节。模板中的报告、日志和实验数据用于展示格式，提交时要换成自己的实际记录。
 
 ### 运行前确认
 
@@ -102,7 +102,7 @@ python scripts/check_submission.py --submission participant/P017 --output output
 通过时，终端会给出审核报告的位置：
 
 ```text
-审核通过: /path/to/robocup-mpe2/outputs/P017/check/audit-report.json
+审核通过: /path/to/robocup_changsha/outputs/P017/check/audit-report.json
 ```
 
 `audit-report.json` 的关键字段可能类似下面的示例。内容是格式示意，不是某位参赛者的实际审核记录：
