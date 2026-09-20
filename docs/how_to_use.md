@@ -123,13 +123,13 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 
 读取结果时不要只看 `performance_score`。还应核对：
 
-- `provenance`：区分正式容器结果与 `local_preview`；
+- `provenance`：记录使用 `official_container` 还是 `local_preview` 执行路径，不作为正式核验结论；
 - `working_tree_dirty` 和 `source_commit`：帮助定位结果对应的代码状态；
 - `group_metrics`：分别观察基础组和协作组表现；
 - `errors`：失败时查看错误阶段、错误码和定位信息；
 - `episodes.csv` 的 `status`、`steps_completed`、覆盖率、碰撞率和耗时字段。
 
-Windows 和 macOS 不支持这里使用的阶段超时机制，脚本会进入 `local_preview` 模式，初始化、单步和单回合的超时限制不生效。Linux 上的本地运行也不能替代组织方核验。不同平台可能产生数值差异，正式成绩以组织方统一环境中的结果为准。
+评测脚本通过 `deadlines_supported()` 检查当前平台是否提供 `setitimer`、`SIGALRM` 和 `ITIMER_REAL`。不支持时，脚本进入 `local_preview` 模式，初始化、单步和单回合的超时限制不生效；支持时启用阶段超时，并将 `provenance` 写为 `official_container`。这个字段表示执行路径，不表示本地结果已经获得组织方核验。不同平台仍可能产生数值差异，正式成绩以组织方统一环境中的结果为准。
 
 ## 使用训练接口
 
@@ -244,11 +244,11 @@ python -c "from pathlib import Path; import hashlib; p = Path('participant/P017/
 
 ### `entry.py` 可以导入，但评测仍失败
 
-如果输出文件已经生成，依次查看 `result.json` 的 `status` 和 `errors`，再在 `episodes.csv` 中定位失败的场景、回合、步骤和 `error_code`。如果没有生成结果文件，先读取命令行错误信息。常见原因包括：返回动作形状或类型错误、动作包含非有限数值、模型文件路径依赖当前工作目录、`reset` 没有清空状态，或推理超过时间限制。
+如果输出文件已经生成，先在 `result.json` 的 `errors` 中查看错误阶段、`step_index` 和上下文，再用 `episodes.csv` 的场景、回合、`status`、`steps_completed` 和 `error_code` 定位对应的回合记录。如果没有生成结果文件，先读取命令行错误信息。常见原因包括：返回动作形状或类型错误、动作包含非有限数值、模型文件路径依赖当前工作目录、`reset` 没有清空状态，或推理超过时间限制。
 
 ### 本地成绩和正式成绩不同
 
-先比较 `provenance`、平台、依赖锁、代码提交、工作区状态、模型摘要、套件与种子安排。Windows 和 macOS 的 `local_preview` 不执行阶段超时限制；即使输入相同，平台数值差异也可能改变边界行为。正式成绩始终以组织方统一环境核验为准。
+先比较 `provenance`、平台、依赖锁、代码提交、工作区状态、模型摘要、套件与种子安排。`local_preview` 不执行阶段超时限制；本地结果即使标记为 `official_container`，也不等于组织方正式核验。即使输入相同，平台数值差异也可能改变边界行为，正式成绩始终以组织方统一环境核验为准。
 
 ### 预检出现 `scan_hits`
 

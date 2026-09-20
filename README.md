@@ -44,7 +44,7 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 
 先查看 `outputs/P017/eval/result.json` 中的 `status`；成功时，`performance_score` 就是这次公开测试的性能分。逐回合数据在同目录的 `episodes.csv`。
 
-Windows 和 macOS 上的运行属于本地预览，不执行阶段超时限制，结果标记为 `local_preview`。不同平台的数值差异也可能影响策略表现。本地测试用于检查运行情况、比较自己的方案，正式成绩以组织方统一核验为准。
+评测脚本会检查当前平台是否提供 `setitimer`、`SIGALRM` 和 `ITIMER_REAL`：不支持时不执行阶段超时限制，并将结果标记为 `local_preview`；支持时会启用阶段超时。即使本地结果的 `provenance` 为 `official_container`，也只表示采用了带阶段超时的执行路径，不代表已经获得组织方核验。不同平台的数值差异也可能影响策略表现，正式成绩仍以组织方统一核验为准。
 
 一次运行是否有效，建议按下面的顺序判断：
 
