@@ -1,0 +1,199 @@
+{
+  "schedule_schema_version": "coverage-schedule/1.0",
+  "schedule_id": "public-schedule-v1",
+  "schedule_hash": "27edea3313ef5b1f026bf56deb07bcc41604c3ed47e5cdd10bf82d8acaea7550",
+  "records": [
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 0,
+      "build_seed": 17720234622102449101,
+      "policy_seed": 1595635815038561411
+    },
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 1,
+      "build_seed": 16519733701779306336,
+      "policy_seed": 17173249205400878177
+    },
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 2,
+      "build_seed": 17968829870800613999,
+      "policy_seed": 18087829675276386719
+    },
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 0,
+      "build_seed": 17731980816820942733,
+      "policy_seed": 5016638364430959714
+    },
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 1,
+      "build_seed": 17878102618719290630,
+      "policy_seed": 2520682936730578496
+    },
+    {
+      "case_id": "basic-0",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 2,
+      "build_seed": 2411642641045127408,
+      "policy_seed": 17093268728536333366
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 0,
+      "build_seed": 9863696679756307466,
+      "policy_seed": 2619939423884755737
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 1,
+      "build_seed": 14394994139441591746,
+      "policy_seed": 5861895221640115011
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 0,
+      "agent_index": 2,
+      "build_seed": 777090169602200871,
+      "policy_seed": 4384875654316050756
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 0,
+      "build_seed": 17726922178833376979,
+      "policy_seed": 1323172096941818763
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 1,
+      "build_seed": 16876580634279045327,
+      "policy_seed": 10358291167014129492
+    },
+    {
+      "case_id": "basic-1",
+      "group_id": "basic",
+      "repeat_index": 1,
+      "agent_index": 2,
+      "build_seed": 9585635230643382661,
+      "policy_seed": 790954759736258024
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 0,
+      "build_seed": 18426289507754903009,
+      "policy_seed": 5868545251296842257
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 1,
+      "build_seed": 14799551032741704951,
+      "policy_seed": 4161245841616049135
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 2,
+      "build_seed": 3598821389728760031,
+      "policy_seed": 936413606426375125
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 0,
+      "build_seed": 6500691263150612602,
+      "policy_seed": 15654480133924124725
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 1,
+      "build_seed": 9512605429732049325,
+      "policy_seed": 7532011605528877123
+    },
+    {
+      "case_id": "coop-0",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 2,
+      "build_seed": 8336241833703424625,
+      "policy_seed": 6541393431258780929
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 0,
+      "build_seed": 6695053177758299621,
+      "policy_seed": 7386537685754993992
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 1,
+      "build_seed": 1372421374303814168,
+      "policy_seed": 10547311773205149271
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 0,
+      "agent_index": 2,
+      "build_seed": 1310041793523582443,
+      "policy_seed": 14795008703407632459
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 0,
+      "build_seed": 17389220734495943049,
+      "policy_seed": 8633404776782042701
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 1,
+      "build_seed": 5308957010881732793,
+      "policy_seed": 8934991974099193875
+    },
+    {
+      "case_id": "coop-1",
+      "group_id": "cooperation",
+      "repeat_index": 1,
+      "agent_index": 2,
+      "build_seed": 7209524228933461411,
+      "policy_seed": 2327226270730498588
+    }
+  ]
+}

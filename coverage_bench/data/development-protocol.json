@@ -1,0 +1,11 @@
+{
+  "protocol_version": "coverage-policy/1.0",
+  "task_version": "coverage-task/1.0",
+  "agent_capacity": 8,
+  "target_capacity": 8,
+  "action_dim": 2,
+  "position_scale": 1.0,
+  "velocity_scale": 1.0,
+  "max_episode_steps": 256,
+  "flatten_version": "coverage-flat/1.0"
+}

@@ -1,0 +1,37 @@
+config_schema_version: coverage-config/1.0
+protocol_version: coverage-policy/1.0
+task_version: coverage-task/1.0
+release_state: development
+num_agents: 3
+num_targets: 3
+horizon: 10
+public:
+  map_half_extent: 1.0
+  dt: 0.1
+  robot_radius: 0.05
+  robot_mass: 1.0
+  drive_force: 1.0
+  damping: 0.25
+  robot_max_speed: 1.0
+  contact_force: 100.0
+  contact_margin: 0.001
+  target_radius: 0.15
+  target_max_speed: 0.2
+  sense_radius: 0.6
+  motion_kind: piecewise_heading_reflect
+  turn_interval_steps:
+  - 5
+  - 10
+  target_speed_fraction:
+  - 0.5
+  - 1.0
+  robot_boundary: clamp_outward_velocity
+  target_boundary: reflect_cover_inset
+scenario:
+  layout_kind: uniform
+  robot_min_gap: 0.02
+  sampling_attempt_limit: 10000
+  crossing_band_fraction: 0.2
+  crossing_angle_jitter: 0.1
+  cluster_radius: 0.2
+collision_weight: 0.2

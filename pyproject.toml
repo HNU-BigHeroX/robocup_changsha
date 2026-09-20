@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "coverage-bench"
+version = "0.1.0"
+description = "MPE2 Collaborative Coverage Benchmark"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=1.26.0",
+    "gymnasium>=0.29.0",
+    "pettingzoo>=1.24.0",
+    "mpe2>=1.1.0",
+    "pydantic>=2.0.0,<3.0.0",
+    "pyyaml>=6.0",
+    "scipy>=1.11.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "build>=1.0.0",
+    "hypothesis>=6.0",
+    "pytest-timeout>=2.0",
+    "pytest-cov>=6.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["coverage_bench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--basetemp=.work/pytest", "--strict-markers", "--strict-config"]
+markers = [
+    "requirement(*ids): 对应 SPEC 的验收编号",
+    "contract: 公开接口与数学契约",
+    "integration: 真实组件与进程集成",
+    "isolation: 正式 Linux 容器隔离",
+    "release: 完整发布材料与复现实验",
+    "harness: 测试工具自身验证",
+    "environment: 当前依赖与运行环境",
+]
+timeout = 60
+timeout_method = "thread"

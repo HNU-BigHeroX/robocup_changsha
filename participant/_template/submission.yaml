@@ -1,0 +1,17 @@
+submission_schema_version: "coverage-submission/1.0"
+participant_id: "P000"
+protocol_version: "coverage-policy/1.0"
+task_version: "coverage-task/1.0"
+entrypoint: "entry:build_policy"
+artifact_dir: "artifacts"
+checkpoint_manifest:
+  - path: "artifacts/policy.npz"
+    sha256: "aedfa4443847600df2fd5e59e0942bff0077849f6d27ea163baf8b4b18d5c728"
+    size_bytes: 92186
+inference_lock: "requirements-infer.lock"
+method_type: "learning"
+train_command: "python train.py"
+training_config_paths: []
+report_path: "REPORT.md"
+metadata:
+  description: "参赛模板：SB3 PPO 训练导出 numpy 前向推理（复制本目录并改成你的编号）"

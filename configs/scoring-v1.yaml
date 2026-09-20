@@ -1,0 +1,17 @@
+score_version: "coverage-score/1.0"
+groups:
+  - group_id: "basic"
+    weight: 0.5
+    random_anchor: 0.0
+    learning_anchor: 1.0
+    min_anchor_gap: 0.01
+  - group_id: "cooperation"
+    weight: 0.5
+    random_anchor: 0.0
+    learning_anchor: 1.0
+    min_anchor_gap: 0.01
+bootstrap_resamples: 1000
+bootstrap_seed: 81273
+confidence_level: 0.95
+near_tie_threshold: 1.0
+supplementary_suite_id: "supplementary"

@@ -1,0 +1,5 @@
+{
+  "return_sum": 1e-6,
+  "mean_coverage_rate": 1e-9,
+  "mean_collision_rate": 1e-9
+}
