@@ -8,6 +8,10 @@
 
 将下面的地址换成组织方提供的地址：
 
+![在 GitHub 仓库主页复制 HTTPS 克隆地址](images/how_to_fork/01-clone-repository.png)
+
+*图 1：在仓库主页点击 Code，选择 HTTPS，然后复制仓库地址。*
+
 ```sh
 git clone <仓库地址> robocup-mpe2
 cd robocup-mpe2
