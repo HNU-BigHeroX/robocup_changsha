@@ -13,7 +13,7 @@
 
 *多机器人协同覆盖 · 有限观测下的策略评测*
 
-**[赛题与规程](competitionv1.0.md)** · **[使用指南](docs/how_to_use.md)** · **[获取仓库](docs/how_to_fork.md)** · **[Git 工作流程](docs/git.md)**
+**[赛题与规程](competitionv1.0.md)** · **[获取仓库](docs/how_to_fork.md)** · **[评测环境与使用](docs/how_to_use.md)** · **[Git 工作流程](docs/git.md)**
 
 </div>
 
@@ -28,9 +28,9 @@
 先向组织方确认参赛编号和仓库权限。文档用 `P017` 举例，操作时请换成自己的编号。
 
 1. 按[获取仓库](docs/how_to_fork.md) Fork 并克隆仓库，检查并准备好本人编号分支，再复制模板建立本人目录。
-2. 按[使用指南](docs/how_to_use.md)安装 Python 3.12 和评测依赖。
+2. 按[评测环境与使用](docs/how_to_use.md)安装 Python 3.12 和评测依赖。
 3. 跑一次提交预检和公开测试，确认模板在你的机器上能够正常运行。
-4. 在 `participant/P017/` 内开发，记录实验，按[参与指南](CONTRIBUTING.md)准备最终提交。
+4. 在 `participant/P017/` 内开发，记录实验，按[赛题与规程](competitionv1.0.md)准备最终提交。
 
 使用 AI 辅助开发时，请让助手先读取 [AGENTS.md](AGENTS.md)。其中约定了 HUNer 的工作范围和开发流程。
 
@@ -101,7 +101,7 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 
 ## 开发前需要知道
 
-策略入口是 `entry.py` 中的 `build_policy(context)`，返回的对象需要实现 `reset`、`act` 和 `close`。每个机器人的动作是形状为 `(2,)` 的 `float32` 数组，两个分量都在 `[-1, 1]` 内。接口和采样示例见[使用指南](docs/how_to_use.md)。
+策略入口是 `entry.py` 中的 `build_policy(context)`，返回的对象需要实现 `reset`、`act` 和 `close`。每个机器人的动作是形状为 `(2,)` 的 `float32` 数组，两个分量都在 `[-1, 1]` 内。接口和采样示例见[评测环境与使用](docs/how_to_use.md)。
 
 训练和评测使用两套依赖。训练环境可以使用 PyTorch、Stable-Baselines3；评测环境没有这些框架。模板通过 `.npz` 保存权重，用 NumPy 完成推理。训练后需要自行导出模型，并更新提交清单中的文件摘要，具体要求见[模型与提交清单](docs/how_to_use.md#模型与提交清单)。
 
@@ -116,11 +116,20 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 - 提交预检和公开测试均已重新运行，结果目录与旧实验分开保存。
 - 没有暂存虚拟环境、缓存、训练检查点或 `outputs/` 下的本地结果。
 
-## 文档
+## 文档与贡献
 
-- [参与指南](CONTRIBUTING.md)：开发记录、报分和最终提交。
-- [获取仓库](docs/how_to_fork.md)：Fork、克隆、准备分支、复制模板。
-- [使用指南](docs/how_to_use.md)：环境安装、接口、模型和本地测试。
-- [Git 工作流程](docs/git.md)：编号分支、功能分支、同步更新和标签。
+- [赛题与规程](competitionv1.0.md)：任务定义、观测与动作协议、评分公式、提交与核验规则。
+- [获取仓库](docs/how_to_fork.md)：Fork、克隆、准备编号分支、创建本人目录。
+- [评测环境与使用](docs/how_to_use.md)：环境安装、策略接口、模型导出、本地测试和常见问题。
+- [Git 工作流程](docs/git.md)：编号分支、功能分支、同步官方更新、最终提交检查。
 - [提交消息](docs/cz.md)：怎样写清楚每次提交做了什么。
-- [赛题与规程](competitionv1.0.md)：任务定义和比赛规则。
+- [AGENTS.md](AGENTS.md)：使用 AI 助手开发时的工作范围和流程约定。
+
+欢迎对我们的框架、文档和评测内容提建议：
+
+- 发现文档表述不清、命令失效或链接错误；
+- 报告框架或评测实现与文档不符的行为；
+- 分享训练、调试与复现方面的经验；
+- 建议框架增加更方便的接口或辅助工具。
+
+详见[参与指南](CONTRIBUTING.md)；安全漏洞请按[安全策略](SECURITY.md)进行报告。
