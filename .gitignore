@@ -9,6 +9,7 @@ build/
 dist/
 .venv/
 venv/
+.venv-train/
 
 # Test / tooling caches
 .pytest_cache/
