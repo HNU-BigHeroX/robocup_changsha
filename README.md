@@ -1,27 +1,8 @@
-<div align="center">
-
-# MPE2 协同覆盖选拔赛
-
-<img src="docs/images/logo/BigHeroX.jpg" alt="BigHeroX Logo" width="280"/>
-
-### 湖南大学 Robot 工坊 · BigHeroX 
-
-[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![PettingZoo](https://img.shields.io/badge/PettingZoo-MPE2-green.svg)](https://pettingzoo.farama.org/environments/mpe2/)
-[![Gymnasium](https://img.shields.io/badge/Gymnasium-API-blue.svg)](https://gymnasium.farama.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-*多机器人协同覆盖 · 有限观测下的策略评测*
-
-**[赛题与规程](competitionv1.0.md)** · **[获取仓库](docs/how_to_fork.md)** · **[评测环境与使用](docs/how_to_use.md)** · **[Git 工作流程](docs/git.md)**
-
-</div>
-
----
-
 这是本次比赛的参赛公开版。你需要编写一个多机器人协同策略，让机器人在有限观测下覆盖移动目标，同时尽量减少碰撞。仓库提供任务环境、策略接口、公开测试配置和一份可以直接运行的学习策略示例。
 
-完整的任务定义、评分公式和提交要求见[赛题与规程](competitionv1.0.md)。第一次使用时，可以先按下面的步骤跑通模板，再开始改自己的策略。
+比赛规模：公开套件每回合为 3 台机器人覆盖 3 个移动目标（基础组、协作组各 2 个场景）；协议容量上限为 8，策略需按固定容量观测实现（掩码标记空槽），不要假设具体数量。本届正式计分仅限公开套件 3v3 两组；更大规模（如 4v5、5v7）可作为拓展实验写进 REPORT.md，不计入正式成绩。
+
+完整的任务定义、评分公式和提交要求见[赛题与规程](competitionv1.1.md)。第一次使用时，可以先按下面的步骤跑通模板，再开始改自己的策略。
 
 ## 开始参赛
 
@@ -30,7 +11,7 @@
 1. 按[获取仓库](docs/how_to_fork.md) Fork 并克隆仓库，检查并准备好本人编号分支，再复制模板建立本人目录。
 2. 按[评测环境与使用](docs/how_to_use.md)安装 Python 3.12 和评测依赖。
 3. 跑一次提交预检和公开测试，确认模板在你的机器上能够正常运行。
-4. 在 `participant/P017/` 内开发，记录实验，按[赛题与规程](competitionv1.0.md)准备最终提交。
+4. 在 `participant/P017/` 内开发，记录实验，按[赛题与规程](competitionv1.1.md)准备最终提交。
 
 使用 AI 辅助开发时，请让助手先读取 [AGENTS.md](AGENTS.md)。其中约定了 HUNer 的工作范围和开发流程。
 
@@ -88,14 +69,14 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 
 ## 仓库里有什么
 
-| 路径 | 用途 |
-| --- | --- |
-| `participant/_template/` | PPO 学习策略示例，包含训练代码、NumPy 推理代码、模型和材料样例 |
-| `participant/P017/` | 按自己的编号创建，存放策略、模型和实验记录 |
-| `coverage_bench/` | 官方任务环境、观测与动作协议、评测实现 |
-| `configs/` | 公开测试场景、种子和评分配置 |
-| `scripts/check_submission.py` | 检查提交结构、模型摘要和静态审核项 |
-| `scripts/evaluate_one.py` | 运行一份提交，生成本地测试结果 |
+| 路径                            | 用途                                                           |
+| ------------------------------- | -------------------------------------------------------------- |
+| `participant/_template/`      | PPO 学习策略示例，包含训练代码、NumPy 推理代码、模型和材料样例 |
+| `participant/P017/`           | 按自己的编号创建，存放策略、模型和实验记录                     |
+| `coverage_bench/`             | 官方任务环境、观测与动作协议、评测实现                         |
+| `configs/`                    | 公开测试场景、种子和评分配置                                   |
+| `scripts/check_submission.py` | 检查提交结构、模型摘要和静态审核项                             |
+| `scripts/evaluate_one.py`     | 运行一份提交，生成本地测试结果                                 |
 
 参赛期间只能修改本人编号目录内的提交文件。官方代码、配置、模板和其他参赛者的目录由各自维护者负责；虚拟环境、缓存和本地测试输出不要放进提交。
 
@@ -118,7 +99,7 @@ python scripts/evaluate_one.py --submission participant/P017 --suite configs/pub
 
 ## 文档与贡献
 
-- [赛题与规程](competitionv1.0.md)：任务定义、观测与动作协议、评分公式、提交与核验规则。
+- [赛题与规程](competitionv1.1.md)：任务定义、观测与动作协议、评分公式、提交与核验规则。
 - [获取仓库](docs/how_to_fork.md)：Fork、克隆、准备编号分支、创建本人目录。
 - [评测环境与使用](docs/how_to_use.md)：环境安装、策略接口、模型导出、本地测试和常见问题。
 - [Git 工作流程](docs/git.md)：编号分支、功能分支、同步官方更新、最终提交检查。

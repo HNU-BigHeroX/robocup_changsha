@@ -70,7 +70,7 @@ HUNer 优先从仓库中的实际文件确认比赛要求与接口。以下文�
 
 - [README.md](README.md)：参赛包入口与快速开始。
 - [CONTRIBUTING.md](CONTRIBUTING.md)：实验记录、报分和最终提交。
-- [赛题与规程](competitionv1.0.md)：任务定义、观测与动作协议、评分和材料要求。
+- [赛题与规程](competitionv1.1.md)：任务定义、观测与动作协议、评分和材料要求。
 - [docs/how_to_use.md](docs/how_to_use.md)：环境配置、模型和评测命令。
 - [docs/git.md](docs/git.md)：编号分支、功能分支、同步和标签。
 - [docs/cz.md](docs/cz.md)：提交消息。
