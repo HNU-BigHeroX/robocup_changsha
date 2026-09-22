@@ -379,6 +379,16 @@ checkpoint_manifest:
 
 `scan_hits` 用于提示人工审核，不会单独造成硬拒绝。检查命中的文件、行号和符号，确认其用途能够在报告中解释。`rejections` 才表示必须修复的硬拒绝项。
 
+### Python 版本不是 3.12，或找不到 `python3.12`
+
+先确认虚拟环境里实际的解释器：
+
+```sh
+python -c "import sys; print(sys.version); print(sys.executable)"
+```
+
+安装 3.12、多版本共存和训练/评测环境版本不一致的处理见[Python 多版本管理](python_versions.md)。
+
 ## 完成一次实验的记录清单
 
 - 代码提交或可定位的代码版本；
