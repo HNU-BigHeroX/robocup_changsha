@@ -1,2 +1,4 @@
 experiment_id,description
-E001,ppo smoke 20000 steps seed 7101
+E001,fixed assignment + deadbeat control -> public score 208.33
+E002,greedy nearest assignment + tracking -> public score 208.33
+E003,tuned KP=3.0 V_MAX=0.5 LEAD=3.0 -> public score 225.0 (coop-0 0.333 -> 1.0)

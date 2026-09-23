@@ -1,27 +1,44 @@
-# 策略研究报告（参赛模板 · 学习基线示例）
+# 策略研究报告（P617 · 规则方法）
 
-## 训练方案
-stable-baselines3 PPO，MlpPolicy [64,64]，观测为与评测同源的 104 维 flatten
-（coverage_bench.spaces.flatten_observation），VecNormalize 仅归一化观测。
-训练环境：coverage_bench.envs.make_training_env，public suite 任务配置（case basic-0），
-独立训练种子序列（默认 7101），公开评测种子不用于训练采样。
+## 方法概述
 
-## 训练成本
-- 总环境步数：24576
-- 训练随机种子：7101
-- wall time：9.0 秒
-- CPU 型号：Windows-11-10.0.26200-SP0
-- 学习曲线：training_curve.csv（每曲线点记录总步数与最近 100 回合平均奖励），
-  冒烟曲线摘录：首行 total_steps=6144, mean_ep_reward_last100=0.560000；末行 total_steps=24576, mean_ep_reward_last100=0.260000
+纯规则策略，无模型文件，推理仅用 NumPy。每个机器人维护独立的策略实例，决策链路为：
+贪心目标分配 → 目标追踪（速度估计 + 提前量拦截）→ 避撞 → 死区控制。
 
-## 模型选择依据
-取训练结束时最终模型（固定策略，不做早停或 checkpoint 挑选）。
+## 组件与参数
 
-## 导出一致性
-tools/export_learning_baseline.py 导出 policy.npz（权重 + 归一化统计量）；
-train.py --check-export 对 256 个真实环境观测比较 SB3 前向与 numpy 前向的确定性动作，
-覆盖观测预处理、归一化、前向、动作裁剪与 dtype 转换，max|Δa| 实测 8.628e-08（容差 1e-5）。
+1. **贪心分配**：机器人按编号顺序各认领"离自己最近且未被认领"的目标，保证覆盖不重复；
+   队友位置用最近可见/记忆的绝对位置近似。
+2. **目标追踪**：用绝对位置重建目标真实速度（连续两次可见观测的位移，EMA 0.7/0.3），
+   预测目标 `LEAD_STEPS` 步后的位置并朝预测点前进。
+3. **避撞**：可见队友进入 `AVOID_RADIUS` 时加排斥速度，避免碰撞扣分。
+4. **死区控制**：把期望速度反解为驱动力
+   `act = mass/(drive_force·dt) · (v_desired − (1−damping)·v)`，再裁剪到 [-1,1]。
 
-## 定位
-给定训练预算下的学习效果与成本参考（spec BD-04）。学习策略未超过 P902 规则基线时，
-如实记录本报告数字，并结合学习曲线检查训练适配、训练预算与奖励设计。
+参数：`KP=3.0`（速度环比例增益）、`V_MAX=0.5`（期望速度上限）、`LEAD_STEPS=3.0`、
+`AVOID_RADIUS=0.3`、`AVOID_GAIN=0.6`。
+
+## 评测结果（public-suite-v1，4 场景 × 2 重复）
+
+- 总分 `performance_score`：**225.0**
+- basic 组：`mean_return` 1.167（`mean_j` 0.1167），0 碰撞
+- cooperation 组：`mean_return` 3.333（`mean_j` 0.3333），0 碰撞
+- 分场景 return：basic-0 0.667、basic-1 1.667、coop-0 1.000、coop-1 5.667
+
+## 与基线对比
+
+官方随机基线约 58.33，官方规则基线约 175.00。本策略 225.0，超过规则基线约 28%。
+
+## 瓶颈分析
+
+物理上，阻尼 `damping=0.25` 使机器人加速缓慢：从静止出发 10 步（horizon=10）仅能
+移动约 0.25 单位，而场地为 2×2。覆盖率本质上受初始机器人与目标的几何距离限制，
+远离的不可达目标无法弥补。coop-1 因几何有利（目标初始就在机器人附近）拿到 5.667，
+其余场景受几何约束封顶。调参（`KP=3`/`V_MAX=0.5`）主要通过更激进的加速把 coop-0
+从 0.333 提升到 1.0。
+
+## 成本与合规
+
+- 无训练、无模型；单步 `act` 约 0.03 ms（远低于 1000 ms 上限）。
+- 依赖仅 numpy（官方镜像自带），`requirements-infer.lock` 无额外依赖。
+- 源码无 pickle/torch/subprocess 等禁止调用；预检 0 拒绝、0 扫描命中。
