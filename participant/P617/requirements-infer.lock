@@ -1,0 +1,1 @@
+# inference dependencies lock（无推理期额外依赖：numpy 前向由官方镜像 numpy 完成，零 torch 零 pickle）
