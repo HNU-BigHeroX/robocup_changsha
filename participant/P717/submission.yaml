@@ -5,13 +5,13 @@ task_version: "coverage-task/1.0"
 entrypoint: "entry:build_policy"
 artifact_dir: "artifacts"
 checkpoint_manifest:
-  - path: "artifacts/policy.npz"
-    sha256: "aedfa4443847600df2fd5e59e0942bff0077849f6d27ea163baf8b4b18d5c728"
-    size_bytes: 92186
+  - path: "artifacts/model_card.json"
+    sha256: "11d3e61421f94b12309b1f2ece45c4816687fd1ce92f3d747449402a9b2c9c5c"
+    size_bytes: 60
 inference_lock: "requirements-infer.lock"
-method_type: "learning"
-train_command: "python train.py"
+method_type: "rule"
+train_command: null
 training_config_paths: []
 report_path: "REPORT.md"
 metadata:
-  description: "参赛模板：SB3 PPO 训练导出 numpy 前向推理（复制本目录并改成你的编号）"
+  description: "无状态规则策略：最近可见目标、按距离让位、角点饱和；仅使用固定容量局部观测和掩码。"
