@@ -64,12 +64,14 @@ Run:
 & 'C:\Users\Aurora\OneDrive\Desktop\robocup\.venv\Scripts\python.exe' -m venv 'C:\Users\Aurora\Desktop\robocup-p717-eval'
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install -r requirements-official.lock
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-deps -e .
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install pytest
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' --version
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip check
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pytest --version
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -c "from coverage_bench import get_protocol_spec; print(get_protocol_spec())"
 ```
 
-Expected: Python 为 `3.12.x`，`pip check` 输出 `No broken requirements found.`，协议容量显示 `agent_capacity=8`、`target_capacity=8`。
+Expected: Python 为 `3.12.x`，`pip check` 输出 `No broken requirements found.`，pytest 能输出版本，协议容量显示 `agent_capacity=8`、`target_capacity=8`。pytest 只安装在仓库外的开发环境中，不加入正式推理锁文件。
 
 - [ ] **Step 4: 不提交环境文件**
 
@@ -748,12 +750,12 @@ git commit -m "docs(P717): 记录225分公开回归"
 
 Expected: 只提交三份真实实验材料。
 
-### Task 8: 对最终提交树重跑全套验收并清理旧环境
+### Task 8: 对最终提交树重跑全套验收并确认环境迁移条件
 
 **Files:**
 - Verify: all tracked files under `participant/P717/`
 - Remove local-only: `participant/P717/**/__pycache__/` if present
-- Remove local-only after replacement verification: `C:\Users\Aurora\OneDrive\Desktop\robocup\.venv`
+- Preserve local-only: `C:\Users\Aurora\OneDrive\Desktop\robocup\.venv` until external `_monitor` probes stop referencing it
 
 - [ ] **Step 1: 再次验证单元测试、保留文件和产物摘要**
 
@@ -845,7 +847,7 @@ Resolve-Path -LiteralPath 'C:\Users\Aurora\OneDrive\Desktop\robocup\.venv'
 Resolve-Path -LiteralPath 'C:\Users\Aurora\Desktop\robocup-p717-eval'
 ```
 
-Expected: 外部环境是健康的 Python 3.12；两个路径解析为不同绝对目录。只有在这些条件和 Step 2 全部满足后，才允许删除精确目标 `C:\Users\Aurora\OneDrive\Desktop\robocup\.venv`；执行时需再次核对路径并按破坏性操作权限流程确认，不触碰仓库根目录或外部新环境。
+Expected: 外部环境是健康的 Python 3.12；两个路径解析为不同绝对目录。本轮保留 `C:\Users\Aurora\OneDrive\Desktop\robocup\.venv`，因为 `_monitor` 探针仍硬编码该解释器；Codex 不修改 `_monitor`。待探针维护方改用外部环境并独立验证后，再单独执行旧环境清理。
 
 - [ ] **Step 5: 最终提交摘要检查**
 
