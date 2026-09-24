@@ -57,7 +57,7 @@
 ## 物理与指标边界
 
 - 动作逐分量限制在 `[-1, 1]`，动作集合是方块，二维范数上限为 `sqrt(2)`。
-- MPE2 先用旧速度更新位置，再更新速度，因此动作对位置存在一拍延迟。
+- MPE2 的递推为 `pos[t+1] = pos[t] + v[t] * dt`，随后执行 `v[t+1] = (1 - damping) * v[t] + (drive_force / mass) * dt * a[t]`。因此 `a[t]` 先改变 `v[t+1]`，再由该速度影响 `pos[t+2]`，动作到可见位移相隔两步。
 - 公开参数下第 10 步单轴最大位移约为 0.249，对角最大位移约为 `0.249 * sqrt(2) = 0.352`。
 - 覆盖判定只检查机器人中心与目标中心的距离是否不超过 `target_radius`；`robot_radius` 不参与覆盖半径。
 - `robot_radius` 参与机器人碰撞判定。
@@ -110,6 +110,8 @@
 - `metadata.description` 写入规则策略说明；
 - 不新增 schema 未定义的顶层字段，因为模型使用 `extra="forbid"`。
 
+`checkpoint_manifest` 没有默认值。若省略该键，Pydantic 会抛出当前脚本未捕获的 `ValidationError`，进程可能以 traceback 结束、退出码不为预期的 2，并且不会生成 `audit-report.json`；因此保留该键是可执行性要求，不只是格式偏好。
+
 删除 `train.py` 的原因是提交语义一致性和人工审核卫生。`torch` 命中属于 `scan_hits`，本身不是自动硬拒绝；不得为了消除命中而使用混淆或动态导入，否则可能触发真正的硬拒绝。
 
 ## 测试设计
@@ -139,13 +141,14 @@
 
 P717 最终公开预览采用以下回归闸门，比较浮点值时使用 `1e-6` 容差：
 
-- 预检退出码为 0，`rejections` 为空；
-- 顶层 `result.json.status == "ok"`；
-- 8/8 回合状态为 `ok`；
-- `abs(performance_score - 225.00) <= 1e-6`；
-- `basic.mean_j >= 0.116667 - 1e-6`；
-- `cooperation.mean_j >= 0.333333 - 1e-6`；
-- 基础组与协作组 `mean_collision_rate == 0.0`；
+- `scripts/check_submission.py` 退出码为 0，且 `audit-report.json.rejections` 为空；
+- `scripts/evaluate_one.py` 退出码为 0，且 `result.json.status == "ok"`；
+- `episodes.csv` 共 8 行回合记录，且每行 `status == "ok"`；
+- `abs(result.json.performance_score - 225.00) <= 1e-6`；
+- `result.json.group_metrics.basic.mean_j >= 0.116667 - 1e-6`；
+- `result.json.group_metrics.cooperation.mean_j >= 0.333333 - 1e-6`；
+- `result.json.group_metrics.basic.mean_collision_rate == 0.0`；
+- `result.json.group_metrics.cooperation.mean_collision_rate == 0.0`；
 - `audit-report.json.digest.working_tree_dirty == false`；
 - `result.json.working_tree_dirty == false`；
 - Windows 结果明确标记为 `provenance=local_preview`，不冒充官方核验结果。
