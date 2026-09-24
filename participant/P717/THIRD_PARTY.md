@@ -1,7 +1,5 @@
 # 第三方依赖与许可声明
 
-当前提交目录由比赛官方仓库的 `participant/_template/` 初始化，仓库采用 MIT License。
+本提交目录由比赛官方仓库的 `participant/_template/` 初始化，仓库采用 MIT License；保留的 `LICENSE` 为模板原文件。
 
-模板训练脚本支持 stable-baselines3、SuperSuit 和 PyTorch；截至 2026-09-24，P717 尚未使用这些库完成个人训练。正式推理使用模板随附的 NumPy 模型产物，不依赖训练框架。
-
-后续如引入第三方代码、模型或数据，将在此记录来源 URL、版本、许可证和具体用途。
+P717 正式策略为本人编写的规则策略，不包含外部模型、训练权重或复制的第三方策略代码。推理仅使用比赛评测环境提供的 NumPy 与 `coverage_bench` 协议接口，依赖声明见原样保留的 `requirements-infer.lock`。

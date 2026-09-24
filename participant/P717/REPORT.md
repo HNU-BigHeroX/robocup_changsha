@@ -2,7 +2,13 @@
 
 ## 当前状态
 
-当前版本完成了参赛目录初始化、评测环境配置和官方模板基线复现，尚未实现个人策略，也未训练个人模型。模板自带模型仅用于验证提交与评测流程。
+P717 已完成参赛目录、Python 3.12 评测环境和模板流程验证，并实现无学习权重的规则策略。E001 保留为官方模板的本地基线；规则策略的成绩只有在干净工作树完成预检和公开评测后才写入。
+
+## 方法
+
+正式策略是不加载学习权重的无状态规则策略。每个机器人只读取本地观测中同时满足 `exists` 与 `visible` 的槽位，按自身到目标的距离稳定排序。对每个候选目标，若某个可见同伴距离该目标更近，则当前机器人让位并尝试下一目标；距离精确相等时，仅由较小 `agent_index` 获胜以打破对称。选中目标后按两个坐标分量分别输出 `-1` 或 `+1`，仅在目标相对向量恰为零或无可用目标时输出零动作。
+
+该实现支持协议固定容量 8 和空槽掩码，不在策略中读取案例编号、评测种子、隐藏配置或公开套件分数。
 
 ## E001：官方模板基线
 
@@ -21,21 +27,15 @@
 
 ## 复现命令
 
-在仓库根目录使用 Python 3.12 评测环境执行：
+在仓库根目录使用仓库外的 Python 3.12 评测环境执行；每次为 `$P717CheckOutput` 和 `$P717EvalOutput` 指定新的仓库外目录：
 
 ```powershell
-.venv\Scripts\python.exe scripts/check_submission.py --submission participant/P717 --output outputs/P717/check-template
-.venv\Scripts\python.exe scripts/evaluate_one.py --submission participant/P717 --suite configs/public-suite-v1.yaml --seeds configs/public-seeds-v1.json --output outputs/P717/eval-template
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' scripts/check_submission.py --submission participant/P717 --output $P717CheckOutput
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' scripts/evaluate_one.py --submission participant/P717 --suite configs/public-suite-v1.yaml --seeds configs/public-seeds-v1.json --output $P717EvalOutput
 ```
-
-## 后续计划
-
-1. 建立基于目标追踪、确定性分工和机器人间避碰的规则策略。
-2. 将规则策略与官方模板分别在相同公开套件上比较。
-3. 在规则基线稳定后，再评估强化学习或规则与学习混合方案。
 
 ## 已知局限
 
-- 当前策略仍是官方模板，不代表最终方案。
-- 尚未进行个人训练、重复训练种子实验或训练模型导出一致性验证。
-- 当前只有 Windows `local_preview` 结果，最终成绩以组织方统一环境核验为准。
+- 当前规则策略不保留跨步记忆；目标不可见或所有目标均让位时输出零动作。
+- Windows `local_preview` 不启用官方阶段超时，正式成绩以组织方统一核验为准。
+- 当前设计依据公开任务协议和公开对照实验，不把公开套件结果硬编码进策略。
