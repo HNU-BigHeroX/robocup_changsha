@@ -1,39 +1,57 @@
 import numpy as np
 
-from coverage_bench.protocol import get_protocol_spec
-from coverage_bench.spaces import flatten_observation
 
-_PROTOCOL_SPEC = get_protocol_spec()
-
-
-class NumpyMLPPolicy:
-    """SB3 PPO 导出权重的 numpy 前向推理（训练见 train.py，导出见 tools/export_learning_baseline.py）。"""
-
-    def __init__(self, artifact_dir):
-        data = np.load(artifact_dir / "policy.npz")
-        self._w1, self._b1 = data["W1"], data["b1"]
-        self._w2, self._b2 = data["W2"], data["b2"]
-        self._w3, self._b3 = data["W3"], data["b3"]
-        self._mean = data["obs_mean"]
-        self._var = data["obs_var"]
-        self._eps = float(data["obs_eps"])
-        self._clip = float(data["obs_clip"])
+class RuleCoveragePolicy:
+    """最近可见目标、按距离让位、角点饱和的无状态规则策略。"""
 
     def reset(self, context):
-        pass
+        return None
+
+    @staticmethod
+    def _corner(vector):
+        if not np.any(np.abs(vector) > 0.0):
+            return np.zeros(2, dtype=np.float32)
+        return np.where(vector >= 0.0, 1.0, -1.0).astype(np.float32)
 
     def act(self, observation):
-        x = flatten_observation(observation, _PROTOCOL_SPEC).astype(np.float64)
-        # 与 VecNormalize.normalize_obs 同序：先归一化再 clip
-        x = np.clip((x - self._mean) / np.sqrt(self._var + self._eps), -self._clip, self._clip)
-        h = np.tanh(x @ self._w1 + self._b1)
-        h = np.tanh(h @ self._w2 + self._b2)
-        action = h @ self._w3 + self._b3
-        return np.clip(action, -1.0, 1.0).astype(np.float32)
+        targets = observation["targets"]
+        valid_targets = observation["target_exists"] & observation["target_visible"]
+        target_indices = np.flatnonzero(valid_targets)
+        if target_indices.size == 0:
+            return np.zeros(2, dtype=np.float32)
+
+        target_vectors = targets[target_indices, :2].astype(np.float64)
+        own_distances = np.linalg.norm(target_vectors, axis=1)
+        order = np.argsort(own_distances, kind="stable")
+
+        peers = observation["peers"]
+        valid_peers = observation["peer_exists"] & observation["peer_visible"]
+        peer_indices = np.flatnonzero(valid_peers)
+        peer_vectors = peers[peer_indices, :2].astype(np.float64)
+        own_index = int(observation["agent_index"])
+
+        for ordered_index in order:
+            target_index = int(target_indices[ordered_index])
+            target_vector = targets[target_index, :2].astype(np.float64)
+            own_distance = float(own_distances[ordered_index])
+
+            beaten = False
+            for peer_index, peer_vector in zip(peer_indices, peer_vectors):
+                peer_distance = float(np.linalg.norm(target_vector - peer_vector))
+                if peer_distance < own_distance or (
+                    peer_distance == own_distance and int(peer_index) < own_index
+                ):
+                    beaten = True
+                    break
+
+            if not beaten:
+                return self._corner(target_vector)
+
+        return np.zeros(2, dtype=np.float32)
 
     def close(self):
-        pass
+        return None
 
 
 def build_policy(context):
-    return NumpyMLPPolicy(context.artifact_dir)
+    return RuleCoveragePolicy()
