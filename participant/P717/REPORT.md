@@ -1,27 +1,41 @@
-# 策略研究报告（参赛模板 · 学习基线示例）
+# P717 策略研究报告
 
-## 训练方案
-stable-baselines3 PPO，MlpPolicy [64,64]，观测为与评测同源的 104 维 flatten
-（coverage_bench.spaces.flatten_observation），VecNormalize 仅归一化观测。
-训练环境：coverage_bench.envs.make_training_env，public suite 任务配置（case basic-0），
-独立训练种子序列（默认 7101），公开评测种子不用于训练采样。
+## 当前状态
 
-## 训练成本
-- 总环境步数：24576
-- 训练随机种子：7101
-- wall time：9.0 秒
-- CPU 型号：Windows-11-10.0.26200-SP0
-- 学习曲线：training_curve.csv（每曲线点记录总步数与最近 100 回合平均奖励），
-  冒烟曲线摘录：首行 total_steps=6144, mean_ep_reward_last100=0.560000；末行 total_steps=24576, mean_ep_reward_last100=0.260000
+当前版本完成了参赛目录初始化、评测环境配置和官方模板基线复现，尚未实现个人策略，也未训练个人模型。模板自带模型仅用于验证提交与评测流程。
 
-## 模型选择依据
-取训练结束时最终模型（固定策略，不做早停或 checkpoint 挑选）。
+## E001：官方模板基线
 
-## 导出一致性
-tools/export_learning_baseline.py 导出 policy.npz（权重 + 归一化统计量）；
-train.py --check-export 对 256 个真实环境观测比较 SB3 前向与 numpy 前向的确定性动作，
-覆盖观测预处理、归一化、前向、动作裁剪与 dtype 转换，max|Δa| 实测 8.628e-08（容差 1e-5）。
+- 日期：2026-09-24
+- 代码提交：`7a9cc0722a61b8345ba53b2d5fe5f32b5053993f`
+- Python：3.12.10
+- 测试套件：`public-suite-v1`
+- 运行标记：`local_preview`
+- 有效回合：8/8
+- `performance_score`：66.6666666666667
+- basic `mean_j`：0.0
+- cooperation `mean_j`：0.13333333333333333
+- 两组平均碰撞率：0.0
 
-## 定位
-给定训练预算下的学习效果与成本参考（spec BD-04）。学习策略未超过 P902 规则基线时，
-如实记录本报告数字，并结合学习曲线检查训练适配、训练预算与奖励设计。
+该结果来自 Windows 本地预览，未执行官方 Linux 环境中的阶段超时限制，不是组织方核验成绩。
+
+## 复现命令
+
+在仓库根目录使用 Python 3.12 评测环境执行：
+
+```powershell
+.venv\Scripts\python.exe scripts/check_submission.py --submission participant/P717 --output outputs/P717/check-template
+.venv\Scripts\python.exe scripts/evaluate_one.py --submission participant/P717 --suite configs/public-suite-v1.yaml --seeds configs/public-seeds-v1.json --output outputs/P717/eval-template
+```
+
+## 后续计划
+
+1. 建立基于目标追踪、确定性分工和机器人间避碰的规则策略。
+2. 将规则策略与官方模板分别在相同公开套件上比较。
+3. 在规则基线稳定后，再评估强化学习或规则与学习混合方案。
+
+## 已知局限
+
+- 当前策略仍是官方模板，不代表最终方案。
+- 尚未进行个人训练、重复训练种子实验或训练模型导出一致性验证。
+- 当前只有 Windows `local_preview` 结果，最终成绩以组织方统一环境核验为准。

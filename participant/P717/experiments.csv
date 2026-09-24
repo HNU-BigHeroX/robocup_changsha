@@ -1,2 +1,2 @@
-experiment_id,description
-E001,ppo smoke 20000 steps seed 7101
+experiment_id,date,code_commit,method,train_seed,train_steps,model_sha256,suite_id,provenance,status,performance_score,basic_mean_j,cooperation_mean_j,episodes_ok,notes
+E001,2026-09-24,7a9cc0722a61b8345ba53b2d5fe5f32b5053993f,official_template,,,aedfa4443847600df2fd5e59e0942bff0077849f6d27ea163baf8b4b18d5c728,public-suite-v1,local_preview,ok,66.6666666666667,0.0,0.13333333333333333,8/8,environment and submission pipeline baseline; no personal training performed
