@@ -62,16 +62,17 @@ Run:
 
 ```powershell
 & 'C:\Users\Aurora\OneDrive\Desktop\robocup\.venv\Scripts\python.exe' -m venv 'C:\Users\Aurora\Desktop\robocup-p717-eval'
-& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install -r requirements-official.lock
-& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-deps -e .
-& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install pytest
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-cache-dir -r requirements-official.lock
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-cache-dir hatchling editables
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-cache-dir --no-build-isolation --no-deps -e .
+& 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip install --no-cache-dir pytest
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' --version
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pip check
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -m pytest --version
 & 'C:\Users\Aurora\Desktop\robocup-p717-eval\Scripts\python.exe' -c "from coverage_bench import get_protocol_spec; print(get_protocol_spec())"
 ```
 
-Expected: Python 为 `3.12.x`，`pip check` 输出 `No broken requirements found.`，pytest 能输出版本，协议容量显示 `agent_capacity=8`、`target_capacity=8`。pytest 只安装在仓库外的开发环境中，不加入正式推理锁文件。
+Expected: Python 为 `3.12.x`，`pip check` 输出 `No broken requirements found.`，pytest 能输出版本，协议容量显示 `agent_capacity=8`、`target_capacity=8`。本机 pip HTTP 缓存曾在读取 PyPI simple-index 后持续空转，因此安装命令统一使用 `--no-cache-dir`；`hatchling` 与 `editables` 用于无隔离 editable 构建。pytest 和这些开发工具只安装在仓库外环境中，不加入正式推理锁文件。
 
 - [ ] **Step 4: 不提交环境文件**
 
