@@ -1,0 +1,16 @@
+submission_schema_version: "coverage-submission/1.0"
+participant_id: "P617"
+protocol_version: "coverage-policy/1.0"
+task_version: "coverage-task/1.0"
+entrypoint: "entry:build_policy"
+artifact_dir: "artifacts"
+checkpoint_manifest:
+  - path: "artifacts/README.txt"
+    sha256: "629ec81e08544aa5a34e0b7686e064295c18c01b51ceba3dfda471b1311f0c11"
+    size_bytes: 334
+inference_lock: "requirements-infer.lock"
+method_type: "rule"
+training_config_paths: []
+report_path: "REPORT.md"
+metadata:
+  description: "规则策略：贪心目标分配 + 目标追踪（速度估计 + 提前量）+ 避撞，纯 NumPy 无模型"
